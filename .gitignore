@@ -1,0 +1,16 @@
+# Build output
+backend/target/
+
+# IDE & OS
+.vscode/settings.json
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Environment & secrets — JANGAN PERNAH DI-PUSH
+backend/src/main/resources/application-prod.yml
+*.env
+
+# Logs
+*.log

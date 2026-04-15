@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: dev
+
+app:
+  jwt:
+    secret: gYmS3cr3tK3y@2025!ChangeThisInProduction#Minimum32Chars
+    expiration-ms: 86400000
