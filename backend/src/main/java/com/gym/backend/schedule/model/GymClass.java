@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 public class GymClass {
 
+    public static Object builder() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +43,7 @@ public class GymClass {
     private Integer maxCapacity;
 
     @Column(name = "current_capacity", nullable = false)
+    @Builder.Default
     private Integer currentCapacity = 0;
 
     @Enumerated(EnumType.STRING)

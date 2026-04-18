@@ -14,6 +14,7 @@ import com.gym.backend.common.exception.ResourceNotFoundException;
 import com.gym.backend.schedule.dto.ClassBookingResponse;
 import com.gym.backend.schedule.dto.GymClassRequest;
 import com.gym.backend.schedule.dto.GymClassResponse;
+import com.gym.backend.schedule.dto.ParticipantResponse;
 import com.gym.backend.schedule.model.ClassBooking;
 import com.gym.backend.schedule.model.GymClass;
 import com.gym.backend.schedule.repository.ClassBookingRepository;
@@ -45,7 +46,6 @@ public class ScheduleService {
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
                 .maxCapacity(request.getMaxCapacity())
-                .currentCapacity(0)
                 .build();
 
         gymClassRepository.save(gymClass);
@@ -53,7 +53,8 @@ public class ScheduleService {
     }
 
     // ── Member: lihat jadwal & booking ────────────────────────────────────
-
+    
+    @Transactional(readOnly = true)
     public List<GymClassResponse> getUpcomingClasses() {
         return gymClassRepository
                 .findByStartTimeAfterOrderByStartTimeAsc(LocalDateTime.now())
@@ -125,6 +126,7 @@ public class ScheduleService {
         return toBookingResponse(booking);
     }
 
+    @Transactional(readOnly = true)
     public List<ClassBookingResponse> getMyBookings(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
@@ -132,6 +134,48 @@ public class ScheduleService {
         return bookingRepository.findByUserIdOrderByBookedAtDesc(user.getId())
                 .stream()
                 .map(this::toBookingResponse)
+                .collect(Collectors.toList());
+    }
+
+    // ── Trainer: lihat kelas & peserta ───────────────────────────────────
+
+    @Transactional(readOnly = true)
+    public List<GymClassResponse> getMyClasses(String email) {
+        User trainer = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+
+        return gymClassRepository
+                .findByTrainerIdOrderByStartTimeAsc(trainer.getId())
+                .stream()
+                .map(this::toClassResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ParticipantResponse> getClassParticipants(String email, Long classId) {
+        User trainer = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+
+        GymClass gymClass = gymClassRepository.findById(classId)
+                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
+
+        // Pastikan kelas ini milik trainer yang login
+        if (gymClass.getTrainer() == null ||
+                !gymClass.getTrainer().getId().equals(trainer.getId())) {
+            throw new ResourceNotFoundException("Kelas tidak ditemukan");
+        }
+
+        return bookingRepository
+                .findByGymClassIdAndStatus(classId, ClassBooking.Status.BOOKED)
+                .stream()
+                .map(b -> ParticipantResponse.builder()
+                        .bookingId(b.getId())
+                        .userId(b.getUser().getId())
+                        .memberName(b.getUser().getName())
+                        .memberEmail(b.getUser().getEmail())
+                        .status(b.getStatus().name())
+                        .bookedAt(b.getBookedAt())
+                        .build())
                 .collect(Collectors.toList());
     }
 

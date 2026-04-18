@@ -19,6 +19,7 @@ import com.gym.backend.common.response.ApiResponse;
 import com.gym.backend.schedule.dto.ClassBookingResponse;
 import com.gym.backend.schedule.dto.GymClassRequest;
 import com.gym.backend.schedule.dto.GymClassResponse;
+import com.gym.backend.schedule.dto.ParticipantResponse;
 import com.gym.backend.schedule.service.ScheduleService;
 
 import jakarta.validation.Valid;
@@ -86,4 +87,31 @@ public class ScheduleController {
                 scheduleService.getMyBookings(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponse.success("Daftar booking saya", bookings));
     }
+
+    // Trainer lihat kelas miliknya
+    @GetMapping("/trainer/classes")
+    @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
+    public ResponseEntity<ApiResponse<List<GymClassResponse>>> getMyClasses(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        List<GymClassResponse> classes =
+                scheduleService.getMyClasses(userDetails.getUsername());
+        return ResponseEntity.ok(
+                ApiResponse.success("Jadwal kelas saya", classes));
+    }
+
+    // Trainer lihat peserta di kelasnya
+    @GetMapping("/trainer/classes/{classId}/participants")
+    @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
+    public ResponseEntity<ApiResponse<List<ParticipantResponse>>> getParticipants(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long classId) {
+
+        List<ParticipantResponse> participants =
+                scheduleService.getClassParticipants(
+                        userDetails.getUsername(), classId);
+        return ResponseEntity.ok(
+                ApiResponse.success("Daftar peserta kelas", participants));
+    }
+
 }

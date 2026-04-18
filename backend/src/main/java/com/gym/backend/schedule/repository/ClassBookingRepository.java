@@ -23,4 +23,7 @@ public interface ClassBookingRepository extends JpaRepository<ClassBooking, Long
     // Semua peserta di satu kelas
     List<ClassBooking> findByGymClassIdAndStatus(
             Long gymClassId, ClassBooking.Status status);
+    
+    // Semua booking untuk trainer (kelas yang dia ajar)        
+    List<ClassBooking> findByGymClassTrainerIdOrderByBookedAtAsc(Long trainerId);
 }

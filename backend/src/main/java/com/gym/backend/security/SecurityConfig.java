@@ -35,11 +35,11 @@ public class SecurityConfig {
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Endpoint publik — tidak perlu token
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/schedule/classes").permitAll()
                 .requestMatchers(
-                    "/api/auth/**"
-                ).permitAll()
-                // Semua endpoint lain wajib login
+                    "/api/schedule/trainer/**"
+                ).hasAnyRole("TRAINER", "ADMIN")
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider())
