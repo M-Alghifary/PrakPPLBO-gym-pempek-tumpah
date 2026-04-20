@@ -15,3 +15,7 @@
 Lihat `backend/src/main/java/com/gym/backend/`
 
 ## Dokumentasi Project
+Sprint 1
+
+
+Sprint 2
