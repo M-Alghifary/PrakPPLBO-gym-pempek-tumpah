@@ -8,9 +8,12 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 ### Progress Task:
 - [x] **1.1 Analisis SRS & Scope Proyek** (Daffa - Scrum Master)
-- [x] **1.2 Design Database ERD & Schema** (Backend 1)
-- [ ] **1.3 UI/UX Wireframe & Mockup** (Frontend 1) - *In Progress*
-- [ ] **1.4 API Login & Auth System** (Backend 2) - *In Progress*
+- [x] **1.2 Design Database ERD & Schema** (Ikram & Azriel)
+- [x] **1.3 UI/UX Wireframe & Mockup** (Rafly & Yasa (Frontend)) 
+- [x] **1.4 API Login & Auth System** (Backend)
+
+### 🛠️ Technical Documentation
+#### Database Entity Relationship Diagram (ERD)
 
 ## Stack
 - Backend: Spring Boot 3.5.13, Java 22, MySQL
