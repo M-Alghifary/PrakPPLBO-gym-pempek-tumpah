@@ -1,4 +1,16 @@
 # Gym Management System
+Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam booking kelas dan Admin dalam pengelolaan operasional secara real-time
+
+---
+
+## 📅 Sprint 1: Requirement & Auth (Current)
+**Periode:** 2 Februari 2026 - 13 Februari 2026
+
+### Progress Task:
+- [x] **1.1 Analisis SRS & Scope Proyek** (Daffa - Scrum Master)
+- [x] **1.2 Design Database ERD & Schema** (Backend 1)
+- [ ] **1.3 UI/UX Wireframe & Mockup** (Frontend 1) - *In Progress*
+- [ ] **1.4 API Login & Auth System** (Backend 2) - *In Progress*
 
 ## Stack
 - Backend: Spring Boot 3.5.13, Java 22, MySQL
@@ -13,9 +25,3 @@
 
 ## Struktur Project
 Lihat `backend/src/main/java/com/gym/backend/`
-
-## Dokumentasi Project
-Sprint 1
-
-
-Sprint 2
