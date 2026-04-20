@@ -13,3 +13,5 @@
 
 ## Struktur Project
 Lihat `backend/src/main/java/com/gym/backend/`
+
+## Dokumentasi Project
