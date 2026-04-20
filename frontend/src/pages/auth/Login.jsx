@@ -47,7 +47,7 @@ export default function Login() {
           <input
             style={styles.input}
             type="email"
-            placeholder="username..."
+            placeholder="email..."
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
