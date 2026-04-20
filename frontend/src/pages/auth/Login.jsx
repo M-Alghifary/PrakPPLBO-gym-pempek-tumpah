@@ -100,10 +100,11 @@ const styles = {
     padding: '14px 20px',
     borderRadius: '30px',
     border: 'none',
+    outline: 'none',
+    boxShadow: 'none',
     backgroundColor: '#ddd',
     fontSize: '14px',
     marginBottom: '12px',
-    outline: 'none',
     boxSizing: 'border-box',
   },
   button: {

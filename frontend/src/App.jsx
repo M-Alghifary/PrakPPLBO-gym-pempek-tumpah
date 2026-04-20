@@ -3,7 +3,6 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import MemberDashboard from './pages/dashboard/MemberDashboard';
 
-// Guard — kalau belum login, redirect ke login
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
@@ -15,15 +14,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <MemberDashboard />
-            </PrivateRoute>
-          }
-        />
-        {/* Default redirect */}
+        <Route path="/dashboard" element={
+          <PrivateRoute><MemberDashboard /></PrivateRoute>
+        } />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
