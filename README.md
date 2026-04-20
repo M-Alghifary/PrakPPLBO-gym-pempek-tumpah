@@ -3,7 +3,7 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 ---
 
-## 📅 Sprint 1: Requirement & Auth (Current)
+## Sprint 1: Requirement & Auth (Current)
 **Periode:** 2 Februari 2026 - 13 Februari 2026
 
 ### Progress Task:
