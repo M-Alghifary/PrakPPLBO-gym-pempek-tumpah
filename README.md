@@ -3,7 +3,7 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 ---
 
-## Sprint 1: Requirement & Auth (Current)
+## Sprint 1: Requirement & Auth
 **Periode:** 2 Februari 2026 - 13 Februari 2026
 
 ### Progress Task:
@@ -12,7 +12,7 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 - [x] **1.3 UI/UX Wireframe & Mockup** (Rafly & Yasa (Frontend)) 
 - [x] **1.4 API Login & Auth System** (Backend)
 
-### 🛠️ Technical Documentation
+### Technical Documentation
 #### Database Entity Relationship Diagram (ERD)
 
 ## Stack
