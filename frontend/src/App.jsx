@@ -5,6 +5,7 @@ import MemberDashboard from './pages/dashboard/MemberDashboard';
 import Schedule from './pages/schedule/Schedule';
 import Booking from './pages/booking/Booking';
 import Report from './pages/report/Report';
+import Workout from './pages/workout/Workout';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token');
@@ -28,6 +29,9 @@ function App() {
         } />
         <Route path="/report" element={
           <PrivateRoute><Report /></PrivateRoute>
+        } />
+        <Route path="/workout" element={
+          <PrivateRoute><Workout /></PrivateRoute>
         } />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
