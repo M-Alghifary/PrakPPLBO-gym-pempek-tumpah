@@ -13,12 +13,14 @@ export default function Login() {
     setError('');
     setLoading(true);
 
+    localStorage.clear();
     try {
       const res = await api.post('/auth/login', form);
-      const { token, name, role } = res.data.data;
+      const { token, name, role, email } = res.data.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('name', name);
+      localStorage.setItem('email', email);
       localStorage.setItem('role', role);
 
       // Redirect berdasarkan role

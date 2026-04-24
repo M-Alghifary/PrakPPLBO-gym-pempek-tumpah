@@ -13,12 +13,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Kalau 401 — token expired, redirect ke login
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.clear();
+      localStorage.clear();  // ← hapus token expired
       window.location.href = '/login';
     }
     return Promise.reject(error);

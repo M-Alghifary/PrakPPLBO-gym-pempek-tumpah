@@ -13,6 +13,8 @@ export default function Register() {
     setError('');
     setLoading(true);
 
+    // Hapus token lama supaya tidak ikut dikirim
+    localStorage.clear();
     try {
       const res = await api.post('/auth/register', form);
       const { token, name, role } = res.data.data;
