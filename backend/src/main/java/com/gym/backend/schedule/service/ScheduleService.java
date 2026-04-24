@@ -30,6 +30,7 @@ public class ScheduleService {
     private final ClassBookingRepository bookingRepository;
     private final UserRepository userRepository;
 
+
     // ── Admin/Trainer: kelola kelas ───────────────────────────────────────
 
     public GymClassResponse createClass(GymClassRequest request) {
@@ -79,26 +80,32 @@ public class ScheduleService {
             throw new BadRequestException("Kuota kelas sudah penuh");
         }
 
-        if (bookingRepository.existsByUserIdAndGymClassId(user.getId(), classId)) {
-            throw new BadRequestException("Kamu sudah melakukan booking kelas ini");
+        if (bookingRepository.existsByUserIdAndGymClassIdAndStatus(
+                user.getId(), classId, ClassBooking.Status.BOOKED)) {
+        throw new BadRequestException("Kamu sudah melakukan booking kelas ini");
         }
 
-        // Kurangi slot dan update status kalau penuh
+        // Cek apakah ada booking sebelumnya yang dibatalkan, kalau ada update jadi BOOKED lagi
+        ClassBooking booking = bookingRepository
+                .findByUserIdAndGymClassId(user.getId(), classId)
+                .map(existing -> {
+                        existing.setStatus(ClassBooking.Status.BOOKED);
+                        existing.setBookedAt(java.time.LocalDateTime.now());
+                        return existing;
+                })
+                .orElseGet(() -> ClassBooking.builder()
+                    .user(user)
+                    .gymClass(gymClass)
+                    .build());
         gymClass.setCurrentCapacity(gymClass.getCurrentCapacity() + 1);
         if (gymClass.isFull()) {
-            gymClass.setStatus(GymClass.Status.FULL);
+                gymClass.setStatus(GymClass.Status.FULL);
         }
         gymClassRepository.save(gymClass);
-
-        ClassBooking booking = ClassBooking.builder()
-                .user(user)
-                .gymClass(gymClass)
-                .build();
-
         bookingRepository.save(booking);
-        return toBookingResponse(booking);
-    }
 
+    return toBookingResponse(booking);
+        }
     @Transactional
     public ClassBookingResponse cancelBooking(String email, Long classId) {
         User user = userRepository.findByEmail(email)
