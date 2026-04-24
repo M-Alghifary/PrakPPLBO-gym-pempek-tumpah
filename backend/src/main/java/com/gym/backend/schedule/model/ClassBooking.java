@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,13 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "class_bookings",
-    uniqueConstraints = {
-        // Satu user hanya bisa booking satu kali per kelas
-        @UniqueConstraint(columnNames = {"user_id", "gym_class_id"})
-    }
-)
+@Table(name = "class_bookings")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -54,7 +47,7 @@ public class ClassBooking {
     @Column(nullable = false)
     private Status status;
 
-    @Column(name = "booked_at", nullable = false, updatable = false)
+    @Column(name = "booked_at", nullable = false)
     private LocalDateTime bookedAt;
 
     @PrePersist

@@ -1,5 +1,12 @@
 package com.gym.backend.schedule.service;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.google.zxing.WriterException;
 import com.gym.backend.auth.model.User;
 import com.gym.backend.auth.repository.UserRepository;
@@ -14,13 +21,8 @@ import com.gym.backend.schedule.model.GymClass;
 import com.gym.backend.schedule.repository.ClassAttendanceRepository;
 import com.gym.backend.schedule.repository.ClassBookingRepository;
 import com.gym.backend.schedule.repository.GymClassRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +71,7 @@ public class AttendanceService {
 
         // Cek apakah member sudah booking kelas ini
         boolean hasBooking = bookingRepository
-                .existsByUserIdAndGymClassId(user.getId(), classId);
+                .existsByUserIdAndGymClassIdAndStatus(user.getId(), classId, ClassBooking.Status.BOOKED);
 
         if (!hasBooking) {
             throw new BadRequestException("Kamu belum melakukan booking kelas ini");
@@ -77,7 +79,7 @@ public class AttendanceService {
 
         // Cek apakah sudah presensi sebelumnya
         if (attendanceRepository.existsByUserIdAndGymClassId(user.getId(), classId)) {
-            throw new BadRequestException("Kamu sudah melakukan presensi untuk kelas ini");
+                throw new BadRequestException("Kamu sudah melakukan presensi untuk kelas ini");
         }
 
         // Catat presensi

@@ -12,7 +12,7 @@ import com.gym.backend.schedule.model.ClassBooking;
 public interface ClassBookingRepository extends JpaRepository<ClassBooking, Long> {
 
     // Cek apakah user sudah booking kelas ini
-    boolean existsByUserIdAndGymClassId(Long userId, Long gymClassId);
+    boolean existsByUserIdAndGymClassIdAndStatus(Long userId, Long gymClassId, ClassBooking.Status status);
 
     // Booking aktif user di kelas tertentu
     Optional<ClassBooking> findByUserIdAndGymClassId(Long userId, Long gymClassId);
