@@ -1,9 +1,10 @@
-package com.gym.backend.membership.model;
+package com.gym.backend.payment.model;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.gym.backend.auth.model.User;
+import com.gym.backend.membership.model.MembershipPackage;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,13 +25,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "member_memberships")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "payments")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
-public class MemberMembership {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,18 +40,25 @@ public class MemberMembership {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "package_id", nullable = false)
+    @JoinColumn(name = "membership_package_id", nullable = false)
     private MembershipPackage membershipPackage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id")
-    private com.gym.backend.payment.model.Payment payment;
+    @Column(nullable = false)
+    private BigDecimal amount;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", nullable = false)
+    private PaymentMethod paymentMethod;
 
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    // Untuk BANK_TRANSFER: nama bank (BCA/Mandiri/BRI/BNI)
+    // Untuk E_WALLET: nama wallet (GoPay/OVO/Dana/ShopeePay)
+    // Untuk QRIS: null
+    @Column(name = "payment_detail")
+    private String paymentDetail;
+
+    // Nomor VA untuk bank, nomor HP untuk e-wallet, token untuk QRIS
+    @Column(name = "payment_code")
+    private String paymentCode;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -61,12 +67,20 @@ public class MemberMembership {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.status = Status.PENDING;
+    }
+
+    public enum PaymentMethod {
+        BANK_TRANSFER, E_WALLET, QRIS
     }
 
     public enum Status {
-        ACTIVE, EXPIRED, CANCELLED
+        PENDING, SUCCESS, EXPIRED
     }
 }

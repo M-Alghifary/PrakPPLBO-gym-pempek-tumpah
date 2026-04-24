@@ -1,6 +1,5 @@
 package com.gym.backend.membership.repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,11 +13,14 @@ public interface MemberMembershipRepository extends JpaRepository<MemberMembersh
 
     // Cari membership aktif milik user
     Optional<MemberMembership> findByUserIdAndStatus(
-            Long userId, MemberMembership.Status status);
+        Long userId, MemberMembership.Status status);
 
     // Cek apakah user punya membership aktif
     boolean existsByUserIdAndStatusAndEndDateAfter(
-            Long userId, MemberMembership.Status status, LocalDate date);
+        Long userId, 
+        MemberMembership.Status status, 
+        java.time.LocalDate date
+    );
 
     // Riwayat membership user
     List<MemberMembership> findByUserIdOrderByCreatedAtDesc(Long userId);
