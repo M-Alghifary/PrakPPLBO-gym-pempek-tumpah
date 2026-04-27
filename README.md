@@ -59,9 +59,18 @@ Panduan Instalasi
 ## Sprint 2: Membership Phase
 **Periode:** 16 Februari 2026 - 27 Februari 2026
 
+### Progress Task:
 - [ ] 2.1 CRUD Data Member & Gym Paket (Backend 1)
 - [ ] 2.2 UI Dashboard & Profil Member (Frontend 2)
 - [ ] 2.3 Unit Testing Fitur Registrasi (QA Tester)
+
+## Sprint 3: Class & Scheduling
+**Periode:** 2 Maret 2026 - 13 Maret 2026
+
+### Progress Task:
+- [ ] 3.1 Manajemen Jadwal Kelas - Admin (Backend 2)
+- [ ] 3.2 Katalog Kelas & Filter UI (Frontend 1)
+- [ ] 3.3 Logic Validasi Sisa Kuota (Backend 1)
 
 ### Technical Documentation
 #### Database Entity Relationship Diagram (ERD)
