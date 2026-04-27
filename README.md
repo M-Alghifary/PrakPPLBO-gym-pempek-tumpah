@@ -2,7 +2,7 @@
 Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam booking kelas dan Admin dalam pengelolaan operasional secara real-time
 
 ## Daftar Isi
-### Tentang Proyek
+Tentang Proyek
 
 Teknologi yang Digunakan
 
@@ -71,6 +71,14 @@ Panduan Instalasi
 - [ ] 3.1 Manajemen Jadwal Kelas - Admin (Backend 2)
 - [ ] 3.2 Katalog Kelas & Filter UI (Frontend 1)
 - [ ] 3.3 Logic Validasi Sisa Kuota (Backend 1)
+
+## Sprint 4: Booking & QR Check-in
+**Periode:** 16 Maret 2026 - 27 Maret 2026
+
+### Progress Task:
+- [ ] 4.1 Fitur Booking Slot API (Backend 2)
+- [ ] 4.2 UI Booking & My Schedule (Frontend 2)
+- [ ] 4.3 Sistem Absensi QR Code (Mobile Dev)
 
 ### Technical Documentation
 #### Database Entity Relationship Diagram (ERD)
