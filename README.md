@@ -11,6 +11,7 @@ Struktur Tim
 Rencana Pengembangan (Roadmap)
 
 Progres Sprint
+
 # Tentang Proyek
 
 Proyek ini bertujuan untuk mendigitalisasi operasional gym, mulai dari sistem autentikasi, manajemen keanggotaan, penjadwalan kelas, hingga integrasi pembayaran.
@@ -27,6 +28,21 @@ Database: MySQL
 
 
 Tools: Laragon/XAMPP, Maven Wrapper 
+
+# Rencana Pengembangan (Roadmap)
+Berdasarkan WBS proyek ini dibagi menjadi 6 Sprint utama:
+
+Sprint 1: Requirement & Auth (Februari) 
+
+Sprint 2: Membership Phase (Februari)
+
+Sprint 3: Class & Scheduling (Maret)
+
+Sprint 4: Booking & QR Check-in (Maret)
+
+Sprint 5: Payment & Tracking (April)
+
+Sprint 6: Final QA & Deploy (April)
 
 Panduan Instalasi
 ---
