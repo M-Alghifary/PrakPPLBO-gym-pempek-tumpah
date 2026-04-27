@@ -56,6 +56,13 @@ Panduan Instalasi
 - [x] **1.3 UI/UX Wireframe & Mockup** (Rafly & Yasa (Frontend)) 
 - [x] **1.4 API Login & Auth System** (Backend)
 
+## Sprint 2: Membership Phase
+**Periode:** 16 Februari 2026 - 27 Februari 2026
+
+- [ ] 2.1 CRUD Data Member & Gym Paket (Backend 1)
+- [ ] 2.2 UI Dashboard & Profil Member (Frontend 2)
+- [ ] 2.3 Unit Testing Fitur Registrasi (QA Tester)
+
 ### Technical Documentation
 #### Database Entity Relationship Diagram (ERD)
 
