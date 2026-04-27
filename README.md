@@ -88,6 +88,15 @@ Panduan Instalasi
 - [ ] 5.2 Kalkulator BMI & Log Latihan (Frontend 1)
 - [ ] 5.3 Laporan Riwayat Transaksi (Backend 2)
 
+## Sprint 6: Final QA & Deploy
+**Periode:** 13 April 2026 - 24 April 2026
+
+### Progress Task:
+- [ ] 6.1 User Acceptance Testing - UAT (QA Tester)
+- [ ] 6.2 Penyusunan User Manual & Dokumen (Scrum Master)
+- [ ] 6.3 Deployment & Final Presentation (Semua Tim)
+      
+
 ### Technical Documentation
 #### Database Entity Relationship Diagram (ERD)
 
