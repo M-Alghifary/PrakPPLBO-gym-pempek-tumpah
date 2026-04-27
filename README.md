@@ -1,8 +1,7 @@
 # Gym Management System
 Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam booking kelas dan Admin dalam pengelolaan operasional secara real-time
 
-**Daftar Isi
-**
+**Daftar Isi**
 Tentang Proyek
 
 Teknologi yang Digunakan
