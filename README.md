@@ -80,6 +80,14 @@ Panduan Instalasi
 - [ ] 4.2 UI Booking & My Schedule (Frontend 2)
 - [ ] 4.3 Sistem Absensi QR Code (Mobile Dev)
 
+## Sprint 5: Payment & Tracking
+**Periode:** 30 Maret 2026 - 10 April 2026
+
+### Progress Task:
+- [ ] 5.1 Integrasi Payment Gateway (Backend 1) 
+- [ ] 5.2 Kalkulator BMI & Log Latihan (Frontend 1)
+- [ ] 5.3 Laporan Riwayat Transaksi (Backend 2)
+
 ### Technical Documentation
 #### Database Entity Relationship Diagram (ERD)
 
