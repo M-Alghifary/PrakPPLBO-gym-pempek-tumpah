@@ -2,15 +2,11 @@
 Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam booking kelas dan Admin dalam pengelolaan operasional secara real-time
 
 ## Daftar Isi
-Tentang Proyek
-
-Teknologi yang Digunakan
-
-Struktur Tim
-
-Rencana Pengembangan (Roadmap)
-
-Progres Sprint
+- Tentang Proyek
+- Teknologi yang Digunakan
+- Struktur Tim
+- Rencana Pengembangan (Roadmap)
+- Progres Sprint
 
 ## Tentang Proyek
 
