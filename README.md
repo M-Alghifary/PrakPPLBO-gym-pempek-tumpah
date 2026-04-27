@@ -1,8 +1,7 @@
 # Gym Management System
 Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam booking kelas dan Admin dalam pengelolaan operasional secara real-time
 
-**Daftar Isi**
-
+# Daftar Isi
 Tentang Proyek
 
 Teknologi yang Digunakan
@@ -12,12 +11,11 @@ Struktur Tim
 Rencana Pengembangan (Roadmap)
 
 Progres Sprint
-
-**Tentang Proyek**
+# Tentang Proyek
 
 Proyek ini bertujuan untuk mendigitalisasi operasional gym, mulai dari sistem autentikasi, manajemen keanggotaan, penjadwalan kelas, hingga integrasi pembayaran.
 
-**Teknologi yang Digunakan**
+# Teknologi yang Digunakan
 
 Backend: Spring Boot 3.5.13 (Java 22) 
 
