@@ -5,7 +5,7 @@ const menus = [
   { label: 'Jadwal Kelas', path: '/schedule', icon: '📅' },
   { label: 'Booking Saya', path: '/booking', icon: '🗓' },
   { label: 'Laporan & BMI', path: '/report', icon: '📊' },
-  { label: 'Riwayat Transaksi', path: '/transactions', icon: '🕐' },
+  { label: 'Riwayat Transaksi', path: '/riwayat', icon: '🕐' },
 ];
 
 export default function Sidebar() {

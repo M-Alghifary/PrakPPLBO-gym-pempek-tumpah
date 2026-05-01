@@ -31,9 +31,16 @@ export default function LoginScreen({ navigation }) {
       await AsyncStorage.setItem('name', data.name || '');
       await AsyncStorage.setItem('role', data.role || '');
       await AsyncStorage.setItem('email', data.email || '');
-      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+      navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
     } catch (err) {
-      setError(err.response?.data?.message || 'Login gagal');
+      console.error('Login error:', err.message, err.response?.data);
+      if (err.response) {
+        setError(err.response.data?.message || `Error ${err.response.status}`);
+      } else if (err.request) {
+        setError('Tidak dapat terhubung ke server. Periksa koneksi jaringan.');
+      } else {
+        setError(err.message || 'Login gagal');
+      }
     } finally {
       setLoading(false);
     }

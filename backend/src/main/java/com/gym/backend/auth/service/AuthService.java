@@ -11,6 +11,8 @@ import com.gym.backend.auth.dto.RegisterRequest;
 import com.gym.backend.auth.model.User;
 import com.gym.backend.auth.repository.UserRepository;
 import com.gym.backend.common.exception.BadRequestException;
+import com.gym.backend.member.model.Member;
+import com.gym.backend.member.repository.MemberRepository;
 import com.gym.backend.security.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -38,8 +41,13 @@ public class AuthService {
 
         userRepository.save(user);
 
+        Member member = Member.builder()
+                .user(user)
+                .build();
+        memberRepository.save(member);
+
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return new AuthResponse(token, user.getName(), user.getRole().name());
+        return new AuthResponse(token, user.getName(), user.getRole().name(), user.getEmail());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -55,6 +63,6 @@ public class AuthService {
                 .orElseThrow(() -> new BadRequestException("User tidak ditemukan"));
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return new AuthResponse(token, user.getName(), user.getRole().name());
+        return new AuthResponse(token, user.getName(), user.getRole().name(), user.getEmail());
     }
 }

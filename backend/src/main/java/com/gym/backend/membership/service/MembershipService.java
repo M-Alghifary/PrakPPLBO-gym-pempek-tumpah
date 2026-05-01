@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gym.backend.auth.model.User;
 import com.gym.backend.auth.repository.UserRepository;
@@ -39,6 +40,7 @@ public class MembershipService {
 
     // ── Membership Member ─────────────────────────────────────────────────
 
+    @Transactional
     public MemberMembershipResponse subscribe(String email, Long packageId) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
@@ -79,6 +81,7 @@ public class MembershipService {
         return toMembershipResponse(membership);
     }
 
+    @Transactional(readOnly = true)
     public MemberMembershipResponse getActiveMembership(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
@@ -91,6 +94,7 @@ public class MembershipService {
         return toMembershipResponse(membership);
     }
 
+    @Transactional(readOnly = true)
     public List<MemberMembershipResponse> getMembershipHistory(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));

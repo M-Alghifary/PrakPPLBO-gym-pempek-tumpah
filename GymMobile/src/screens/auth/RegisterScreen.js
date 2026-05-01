@@ -29,7 +29,15 @@ export default function RegisterScreen({ navigation }) {
       await register(name, email, password);
       navigation.navigate('Login');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registrasi gagal');
+        console.error('Register error:', JSON.stringify(err.response?.data));
+        const data = err.response?.data;
+        if (data?.errors) {
+          // Spring validation errors (array)
+          const messages = Object.values(data.errors).join(', ');
+          setError(messages);
+        } else {
+          setError(data?.message || 'Registrasi gagal');
+        }
     } finally {
       setLoading(false);
     }

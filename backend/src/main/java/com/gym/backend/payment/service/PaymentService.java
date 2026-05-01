@@ -1,6 +1,5 @@
 package com.gym.backend.payment.service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +37,18 @@ public class PaymentService {
     public PaymentResponse initiatePayment(String email, Long packageId, PaymentRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+        
+        boolean hasActive = memberMembershipRepository
+                .existsByUserIdAndStatusAndEndDateAfter(
+                        user.getId(),
+                        MemberMembership.Status.ACTIVE,
+                        LocalDate.now().plusDays(7));
+
+        if (hasActive) {
+            throw new BadRequestException(
+                "Membership kamu masih aktif lebih dari 7 hari. " +
+                "Perpanjang saat mendekati tanggal habis.");
+        }
 
         MembershipPackage pkg = packageRepository.findById(packageId)
                 .orElseThrow(() -> new ResourceNotFoundException("Paket tidak ditemukan"));
@@ -82,21 +93,40 @@ public class PaymentService {
         payment.setPaidAt(LocalDateTime.now());
         paymentRepository.save(payment);
 
+        // Guard: jangan buat membership baru kalau sudah ada yang aktif
+        boolean hasActive = memberMembershipRepository
+                .existsByUserIdAndStatusAndEndDateAfter(
+                        user.getId(),
+                        MemberMembership.Status.ACTIVE,
+                        LocalDate.now());
+
+        if (!hasActive) {
+            MembershipPackage pkg = payment.getMembershipPackage();
+
+            // Cek apakah ada membership aktif yang belum habis
+            LocalDate startDate = memberMembershipRepository
+                    .findByUserIdAndStatus(user.getId(), MemberMembership.Status.ACTIVE)
+                    .map(existing -> existing.getEndDate()) // mulai setelah yang lama habis
+                    .orElse(LocalDate.now());              // kalau tidak ada, mulai hari ini
+
+            LocalDate endDate = startDate.plusDays(pkg.getDurationDays());
+
+            MemberMembership membership = MemberMembership.builder()
+                    .user(user)
+                    .membershipPackage(pkg)
+                    .payment(payment)
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .status(MemberMembership.Status.ACTIVE)
+                    .build();
+
+            memberMembershipRepository.save(membership);
+        }
+
         // Aktifkan membership
         MembershipPackage pkg = payment.getMembershipPackage();
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(pkg.getDurationDays());
-
-        MemberMembership membership = MemberMembership.builder()
-                .user(user)
-                .membershipPackage(pkg)
-                .payment(payment)
-                .startDate(startDate)
-                .endDate(endDate)
-                .status(MemberMembership.Status.ACTIVE)
-                .build();
-
-        memberMembershipRepository.save(membership);
         return toResponse(payment);
     }
 

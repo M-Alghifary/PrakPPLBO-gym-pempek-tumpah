@@ -8,23 +8,28 @@ export default function MemberDashboard() {
   const name = localStorage.getItem('name');
 
   const [membership, setMembership] = useState(null);
+  const [packages, setPackages] = useState([]);
   const [classes, setClasses] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [subscribing, setSubscribing] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: '' });
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [memberRes, classRes, bookingRes] = await Promise.all([
+        const [memberRes, classRes, bookingRes, packageRes] = await Promise.all([
           api.get('/memberships/active').catch(() => ({ data: { data: null } })),
           api.get('/schedule/classes').catch(() => ({ data: { data: [] } })),
           api.get('/schedule/my-bookings').catch(() => ({ data: { data: [] } })),
+          api.get('/memberships/packages').catch(() => ({ data: { data: [] } })),
         ]);
 
         setMembership(memberRes.data.data);
         setClasses(classRes.data.data?.slice(0, 3) || []);
         setBookings(bookingRes.data.data?.slice(0, 2) || []);
+        setPackages(packageRes.data.data || []);
       } catch (err) {
         console.error(err);
       } finally {
@@ -33,6 +38,25 @@ export default function MemberDashboard() {
     };
     fetchAll();
   }, []);
+
+  const subscribePackage = async (packageId) => {
+    try {
+      setSubscribing(true);
+      const res = await api.post(`/memberships/subscribe/${packageId}`);
+      setMembership(res.data.data);
+      setMessage({ text: 'Membership berhasil diaktifkan!', type: 'success' });
+      setTimeout(() => setMessage({ text: '', type: '' }), 3000);
+    } catch (err) {
+      console.error(err);
+      setMessage({
+        text: err.response?.data?.message || 'Gagal membeli paket membership',
+        type: 'error',
+      });
+      setTimeout(() => setMessage({ text: '', type: '' }), 3000);
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -134,6 +158,46 @@ export default function MemberDashboard() {
             <div style={{ color: '#aaa', fontSize: '13px', marginTop: '12px' }}>
               Belum ada aktivitas
             </div>
+          )}
+        </div>
+      </div>
+
+      {message.text && (
+        <div style={{
+          ...styles.notification,
+          backgroundColor: message.type === 'success' ? '#1a3a2a' : '#3a1a1a',
+          borderColor: message.type === 'success' ? '#4caf7d' : '#ff6b6b',
+          color: message.type === 'success' ? '#4caf7d' : '#ff6b6b',
+          marginBottom: '18px',
+        }}>
+          {message.text}
+        </div>
+      )}
+
+      <div style={styles.packageSection}>
+        <div style={styles.sectionHeader}>
+          <h3 style={styles.sectionTitle}>Pilihan Paket Membership</h3>
+          <span style={styles.sectionSubtitle}>Pilih paket sesuai kebutuhanmu dan lihat riwayat setelah pembelian.</span>
+        </div>
+        <div style={styles.packageRow}>
+          {packages.length > 0 ? (
+            packages.map((pkg) => (
+              <div key={pkg.id} style={styles.packageCard}>
+                <div style={styles.packageName}>{pkg.name}</div>
+                <div style={styles.packageDuration}>{pkg.durationDays} hari</div>
+                <div style={styles.packageDescription}>{pkg.description}</div>
+                <div style={styles.packagePrice}>Rp {Number(pkg.price).toLocaleString('id-ID')}</div>
+                <button
+                  style={styles.packageBtn}
+                  onClick={() => subscribePackage(pkg.id)}
+                  disabled={subscribing}
+                >
+                  {subscribing ? 'Memproses...' : 'Beli Sekarang'}
+                </button>
+              </div>
+            ))
+          ) : (
+            <div style={{ color: '#aaa' }}>Paket membership tidak tersedia saat ini.</div>
           )}
         </div>
       </div>
@@ -332,5 +396,71 @@ const styles = {
     cursor: 'pointer',
     fontSize: '13px',
     marginTop: '4px',
+  },
+  notification: {
+    padding: '14px 16px',
+    borderRadius: '12px',
+    border: '1px solid',
+    fontSize: '14px',
+  },
+  packageSection: {
+    backgroundColor: '#1b1b1b',
+    borderRadius: '16px',
+    padding: '20px',
+    marginBottom: '20px',
+  },
+  sectionHeader: {
+    marginBottom: '16px',
+  },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: '18px',
+    margin: 0,
+  },
+  sectionSubtitle: {
+    color: '#aaa',
+    fontSize: '13px',
+  },
+  packageRow: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: '16px',
+  },
+  packageCard: {
+    backgroundColor: '#262626',
+    borderRadius: '16px',
+    padding: '18px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+  },
+  packageName: {
+    color: '#fff',
+    fontSize: '16px',
+    fontWeight: 'bold',
+  },
+  packageDuration: {
+    color: '#4caf7d',
+    fontSize: '13px',
+  },
+  packageDescription: {
+    color: '#ccc',
+    fontSize: '13px',
+    minHeight: '58px',
+  },
+  packagePrice: {
+    color: '#fff',
+    fontSize: '18px',
+    fontWeight: 'bold',
+  },
+  packageBtn: {
+    border: 'none',
+    borderRadius: '12px',
+    padding: '12px',
+    backgroundColor: '#4caf7d',
+    color: '#111',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    marginTop: 'auto',
   },
 };
