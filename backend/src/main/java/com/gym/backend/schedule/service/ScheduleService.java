@@ -1,6 +1,5 @@
 package com.gym.backend.schedule.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +57,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public List<GymClassResponse> getUpcomingClasses() {
         return gymClassRepository
-                .findByStartTimeAfterOrderByStartTimeAsc(LocalDateTime.now())
+                .findAllByOrderByStartTimeDesc()
                 .stream()
                 .map(this::toClassResponse)
                 .collect(Collectors.toList());

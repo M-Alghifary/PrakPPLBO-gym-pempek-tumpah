@@ -133,7 +133,7 @@ export default function QrScannerScreen({ route, navigation }) {
             <Text style={styles.instruction}>
               {scanned
                 ? 'Memproses...'
-                : 'Arahkan kamera ke QR Code\nyang ditampilkan Trainer'}
+                : 'Arahkan kamera ke QR Code\nyang berada di area kelas untuk mencatat kehadiran.'}
             </Text>
           )}
         </View>

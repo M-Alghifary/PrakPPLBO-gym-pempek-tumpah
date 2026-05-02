@@ -1,6 +1,7 @@
 package com.gym.backend.member.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gym.backend.auth.model.User;
 import com.gym.backend.auth.repository.UserRepository;
@@ -21,6 +22,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public MemberResponse createProfile(String email, MemberRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
@@ -28,7 +30,7 @@ public class MemberService {
         if (memberRepository.existsByUserId(user.getId())) {
             throw new BadRequestException("Profil member sudah ada");
         }
-
+        
         Member member = Member.builder()
                 .user(user)
                 .phoneNumber(request.getPhoneNumber())
@@ -43,6 +45,7 @@ public class MemberService {
         return toResponse(member);
     }
 
+    @Transactional(readOnly = true)
     public MemberResponse getProfile(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
@@ -53,6 +56,7 @@ public class MemberService {
         return toResponse(member);
     }
 
+    @Transactional
     public MemberResponse updateProfile(String email, MemberRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));

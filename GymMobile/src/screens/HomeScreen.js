@@ -223,13 +223,25 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.emptyText}>Belum ada booking</Text>
         ) : (
           bookings.map((b, i) => (
-            <View key={i} style={styles.bookingCard}>
+              <TouchableOpacity
+                key={i}
+                style={styles.bookingCard}
+                onPress={() => b.status === 'BOOKED' && navigation.navigate('QrScanner', {
+                  classId: b.classId,
+                  className: b.className,
+                
+                })}
+              >
               <Text style={styles.bookingName}>{b.className}</Text>
               <Text style={styles.bookingDate}>{formatDate(b.startTime)}</Text>
               <Text style={[styles.bookingStatus, { color: statusColor(b.status) }]}>
-                {b.status}
+                {b.status === 'BOOKED' && (
+                  <Text style={{ color: '#4caf7d', fontSize: 11, marginTop: 4 }}>
+                    📷 Tap untuk scan absen
+                  </Text>
+                )}
               </Text>
-            </View>
+            </TouchableOpacity>
           ))
         )}
 
