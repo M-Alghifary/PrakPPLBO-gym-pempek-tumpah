@@ -28,3 +28,19 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 ## Struktur Project
 Lihat `backend/src/main/java/com/gym/backend/`
+
+## Cara Run
+### Backend
+cd backend && ./mvnw spring-boot:run
+
+### Mobile  
+cd GymMobile && npx expo start --clear
+Tekan 'a' untuk Android emulator
+
+### Test User
+Email: test@gmail.com
+Password: 12345678
+
+### Catatan
+Update IP di GymMobile/src/api/axiosInstance.js 
+sesuai IP laptop (cek via ipconfig)
