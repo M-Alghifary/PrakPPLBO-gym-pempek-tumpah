@@ -6,9 +6,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminMemberPage from './pages/admin/AdminMemberPage';
 import AdminClassPage from './pages/admin/AdminClassPage';
 import AdminFinancePage from './pages/admin/AdminFinancePage';
-        <Route path="/admin/finance" element={
-          <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminFinancePage /></PrivateRoute>
-        } />
+import TrainerDashboard from './pages/trainer/TrainerDashboard';
 import Schedule from './pages/schedule/Schedule';
 import Booking from './pages/booking/Booking';
 import Report from './pages/report/Report';
@@ -25,7 +23,13 @@ function PrivateRoute({ children, allowedRoles }) {
   }
 
   if (allowedRoles && !allowedRoles.includes(userRole)) {
-    return <Navigate to={userRole === 'ADMIN' || userRole === 'OWNER' ? '/admin/dashboard' : '/dashboard'} />;
+    if (userRole === 'ADMIN' || userRole === 'OWNER') {
+      return <Navigate to="/admin/dashboard" />;
+    } else if (userRole === 'TRAINER') {
+      return <Navigate to="/trainer/dashboard" />;
+    } else {
+      return <Navigate to="/dashboard" />;
+    }
   }
 
   return children;
@@ -73,6 +77,11 @@ function App() {
         } />
         <Route path="/admin/finance" element={
           <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminFinancePage /></PrivateRoute>
+        } />
+
+        {/* Trainer Routes */}
+        <Route path="/trainer/dashboard" element={
+          <PrivateRoute allowedRoles={['TRAINER']}><TrainerDashboard /></PrivateRoute>
         } />
 
         {/* Default Routes */}

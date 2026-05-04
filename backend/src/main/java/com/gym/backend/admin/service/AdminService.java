@@ -65,6 +65,21 @@ public class AdminService {
                                 .collect(Collectors.toList());
         }
 
+        @Transactional(readOnly = true)
+        public List<AdminMemberResponse> getAllTrainers() {
+                return userRepository.findAll()
+                                .stream()
+                                .filter(user -> user.getRole() == User.Role.TRAINER)
+                                .map(user -> AdminMemberResponse.builder()
+                                                .id(user.getId())
+                                                .name(user.getName())
+                                                .email(user.getEmail())
+                                                .role(user.getRole().name())
+                                                .joinedAt(user.getCreatedAt())
+                                                .build())
+                                .collect(Collectors.toList());
+        }
+
         @Transactional
         public void updateUserRole(Long userId, String role) {
                 User user = userRepository.findById(userId)

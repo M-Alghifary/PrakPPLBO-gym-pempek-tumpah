@@ -15,13 +15,18 @@ const adminMenus = [
   { label: 'Laporan Keuangan', path: '/admin/finance', icon: '💰' },
 ];
 
+const trainerMenus = [
+  { label: 'Home', path: '/trainer/dashboard', icon: '🏠' },
+];
+
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const userRole = localStorage.getItem('userRole');
   const isAdmin = userRole === 'ADMIN' || userRole === 'OWNER';
+  const isTrainer = userRole === 'TRAINER';
   
-  const menus = isAdmin ? adminMenus : memberMenus;
+  const menus = isAdmin ? adminMenus : isTrainer ? trainerMenus : memberMenus;
 
   const handleLogout = () => {
     localStorage.clear();

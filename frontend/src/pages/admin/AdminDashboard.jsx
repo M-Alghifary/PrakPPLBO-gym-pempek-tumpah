@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import AdminMemberManagement from '../../components/AdminMemberManagement';
 // import AdminClassManagement from '../../components/AdminClassManagement';
-import { getAllMembers, getTodayCheckins, getAllClasses } from '../../api/adminApi';
+import { getAllMembers, getTodayCheckins } from '../../api/adminApi';
+import { getAdminAllClasses } from '../../api/adminApi';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -26,7 +27,7 @@ export default function AdminDashboard() {
       const [membersData, checkinsData, classesData] = await Promise.all([
         getAllMembers(),
         getTodayCheckins(),
-        getAllClasses()
+        getAdminAllClasses()
       ]);
 
       setMembers(membersData || []);

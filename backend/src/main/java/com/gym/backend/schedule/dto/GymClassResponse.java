@@ -13,6 +13,7 @@ public class GymClassResponse {
     private Long id;
     private String name;
     private String description;
+    private Long trainerId;
     private String trainerName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

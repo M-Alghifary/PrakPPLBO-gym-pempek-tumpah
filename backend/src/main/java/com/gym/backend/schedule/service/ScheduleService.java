@@ -52,6 +52,35 @@ public class ScheduleService {
         return toClassResponse(gymClass);
     }
 
+    @Transactional
+    public GymClassResponse updateClass(Long classId, GymClassRequest request) {
+        GymClass gymClass = gymClassRepository.findById(classId)
+                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
+
+        User trainer = null;
+        if (request.getTrainerId() != null) {
+            trainer = userRepository.findById(request.getTrainerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Trainer tidak ditemukan"));
+        }
+
+        gymClass.setName(request.getName());
+        gymClass.setDescription(request.getDescription());
+        gymClass.setTrainer(trainer);
+        gymClass.setStartTime(request.getStartTime());
+        gymClass.setEndTime(request.getEndTime());
+        gymClass.setMaxCapacity(request.getMaxCapacity());
+
+        gymClassRepository.save(gymClass);
+        return toClassResponse(gymClass);
+    }
+
+    @Transactional
+    public void deleteClass(Long classId) {
+        GymClass gymClass = gymClassRepository.findById(classId)
+                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
+        gymClassRepository.delete(gymClass);
+    }
+
     // ── Member: lihat jadwal & booking ────────────────────────────────────
     
     @Transactional(readOnly = true)
@@ -192,6 +221,7 @@ public class ScheduleService {
                 .id(c.getId())
                 .name(c.getName())
                 .description(c.getDescription())
+                .trainerId(c.getTrainer() != null ? c.getTrainer().getId() : null)
                 .trainerName(c.getTrainer() != null ? c.getTrainer().getName() : "TBA")
                 .startTime(c.getStartTime())
                 .endTime(c.getEndTime())

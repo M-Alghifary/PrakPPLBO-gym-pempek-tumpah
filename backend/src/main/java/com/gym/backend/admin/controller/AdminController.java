@@ -17,6 +17,7 @@ import com.gym.backend.admin.dto.AdminMemberResponse;
 import com.gym.backend.admin.dto.ReportResponse;
 import com.gym.backend.admin.service.AdminService;
 import com.gym.backend.common.response.ApiResponse;
+import com.gym.backend.schedule.dto.GymClassRequest;
 import com.gym.backend.schedule.dto.GymClassResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,13 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success("Daftar semua member", members));
     }
 
+    // Semua trainer
+    @GetMapping("/trainers")
+    public ResponseEntity<ApiResponse<List<AdminMemberResponse>>> getAllTrainers() {
+        List<AdminMemberResponse> trainers = adminService.getAllTrainers();
+        return ResponseEntity.ok(ApiResponse.success("Daftar semua trainer", trainers));
+    }
+
     // Update role user
     @PutMapping("/members/{userId}/role")
     public ResponseEntity<ApiResponse<Void>> updateRole(
@@ -72,6 +80,22 @@ public class AdminController {
     public ResponseEntity<ApiResponse<List<GymClassResponse>>> getAllClasses() {
         List<GymClassResponse> classes = adminService.getAllClasses();
         return ResponseEntity.ok(ApiResponse.success("Semua kelas", classes));
+    }
+
+    // Update kelas
+    @PutMapping("/classes/{classId}")
+    public ResponseEntity<ApiResponse<GymClassResponse>> updateClass(
+            @PathVariable Long classId,
+            @RequestBody GymClassRequest request) {
+        GymClassResponse updated = adminService.updateClass(classId, request);
+        return ResponseEntity.ok(ApiResponse.success("Kelas berhasil diperbarui", updated));
+    }
+
+    // Hapus kelas
+    @DeleteMapping("/classes/{classId}")
+    public ResponseEntity<ApiResponse<Void>> deleteClass(@PathVariable Long classId) {
+        adminService.deleteClass(classId);
+        return ResponseEntity.ok(ApiResponse.success("Kelas berhasil dihapus"));
     }
 
     // Cancel kelas
