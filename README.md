@@ -6,8 +6,9 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 # Daftar isi
 1. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
 2. [Progres Sprint](#progres-sprint)
-3. [Technical Documentation](#technical-documentation)
-4. [Langkah-langkah run project](#langkah-langkah-run-project)
+3. [Rencana Pengembangan (Roadmap)](#Rencana_Pengembangan_Roadmap)
+4. [Technical Documentation](#technical-documentation)
+5. [Langkah-langkah run project](#langkah-langkah-run-project)
 
 ---
 
@@ -82,10 +83,10 @@ Berdasarkan WBS, proyek ini dibagi menjadi 6 Sprint utama:
 
 ---
 
-### Technical Documentation
-#### Mockup UI/UX design (Rafly & Yasa)
+# Technical Documentation
+## Mockup UI/UX design (Rafly & Yasa)
 https://www.figma.com/design/fTq8VfZoXyemRBN807QXQq/PT-PEMPEK-TUMPAH-MENCARI-CINTA?node-id=0-1&p=f&t=ds2idzijxrb77lIH-0
-#### Database Entity Relationship Diagram (ERD)
+## Database Entity Relationship Diagram (ERD)
 
 ---
 
