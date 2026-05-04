@@ -6,6 +6,8 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 # Daftar isi
 1. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
 2. [Progres Sprint](#progres-sprint)
+3. [Technical Documentation](#technical-documentation)
+4. [Langkah-langkah run project](#langkah-langkah-run-project)
 
 ---
 
