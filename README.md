@@ -25,7 +25,7 @@ https://www.figma.com/design/fTq8VfZoXyemRBN807QXQq/PT-PEMPEK-TUMPAH-MENCARI-CIN
 
 1. Pastikan MySQL aktif (Laragon / XAMPP)
 2. Buat database: `CREATE DATABASE gym_db;`
-3. Sesuaikan `application-dev.yml` dengan credential MySQL kamu
+3. Sesuaikan `application-dev.yml` 
 4. Jalankan: `cd backend && ./mvnw spring-boot:run`
 
 ## Struktur Project
