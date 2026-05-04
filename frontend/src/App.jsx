@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import MemberDashboard from './pages/dashboard/MemberDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import Schedule from './pages/schedule/Schedule';
 import Booking from './pages/booking/Booking';
 import Report from './pages/report/Report';
@@ -9,9 +10,19 @@ import Workout from './pages/workout/Workout';
 import Membership from './pages/membership/Membership';
 import Riwayat from './pages/Riwayat/Riwayat';
 
-function PrivateRoute({ children }) {
+function PrivateRoute({ children, allowedRoles }) {
   const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
+  const userRole = localStorage.getItem('userRole');
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to={userRole === 'ADMIN' || userRole === 'OWNER' ? '/admin/dashboard' : '/dashboard'} />;
+  }
+
+  return children;
 }
 
 function App() {
@@ -20,27 +31,37 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
+        {/* Member Routes */}
         <Route path="/dashboard" element={
-          <PrivateRoute><MemberDashboard /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><MemberDashboard /></PrivateRoute>
         } />
         <Route path="/schedule" element={
-          <PrivateRoute><Schedule /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><Schedule /></PrivateRoute>
         } />
         <Route path="/booking" element={
-          <PrivateRoute><Booking /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><Booking /></PrivateRoute>
         } />
         <Route path="/report" element={
-          <PrivateRoute><Report /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><Report /></PrivateRoute>
         } />
         <Route path="/workout" element={
-          <PrivateRoute><Workout /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><Workout /></PrivateRoute>
         } />
         <Route path="/membership" element={
-          <PrivateRoute><Membership /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><Membership /></PrivateRoute>
         } />
         <Route path="/riwayat" element={
-          <PrivateRoute><Riwayat /></PrivateRoute>
+          <PrivateRoute allowedRoles={['MEMBER']}><Riwayat /></PrivateRoute>
         } />
+
+        {/* Admin Routes */}
+        <Route path="/admin/dashboard" element={
+          <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminDashboard /></PrivateRoute>
+        } />
+
+        {/* Default Routes */}
+        <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>

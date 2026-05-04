@@ -1,9 +1,11 @@
 package com.gym.backend.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,6 +29,20 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    // Dashboard Stats
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getDashboardStats() {
+        Map<String, Object> stats = adminService.getDashboardStats();
+        return ResponseEntity.ok(ApiResponse.success("Dashboard stats", stats));
+    }
+
+    // Today's Checkins
+    @GetMapping("/checkins/today")
+    public ResponseEntity<ApiResponse<List<AdminMemberResponse>>> getTodayCheckins() {
+        List<AdminMemberResponse> checkins = adminService.getTodayCheckins();
+        return ResponseEntity.ok(ApiResponse.success("Check-in hari ini", checkins));
+    }
+
     // Semua member
     @GetMapping("/members")
     public ResponseEntity<ApiResponse<List<AdminMemberResponse>>> getAllMembers() {
@@ -42,6 +58,13 @@ public class AdminController {
 
         adminService.updateUserRole(userId, role);
         return ResponseEntity.ok(ApiResponse.success("Role berhasil diupdate"));
+    }
+
+    // Delete member
+    @DeleteMapping("/members/{userId}")
+    public ResponseEntity<ApiResponse<Void>> deleteMember(@PathVariable Long userId) {
+        adminService.deleteMember(userId);
+        return ResponseEntity.ok(ApiResponse.success("Member berhasil dihapus"));
     }
 
     // Semua kelas

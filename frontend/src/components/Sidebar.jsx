@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const menus = [
+const memberMenus = [
   { label: 'Home', path: '/dashboard', icon: '⌂' },
   { label: 'Jadwal Kelas', path: '/schedule', icon: '📅' },
   { label: 'Booking Saya', path: '/booking', icon: '🗓' },
@@ -8,9 +8,17 @@ const menus = [
   { label: 'Riwayat Transaksi', path: '/riwayat', icon: '🕐' },
 ];
 
+const adminMenus = [
+  { label: 'Dashboard Admin', path: '/admin/dashboard', icon: '📊' },
+];
+
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const userRole = localStorage.getItem('userRole');
+  const isAdmin = userRole === 'ADMIN' || userRole === 'OWNER';
+  
+  const menus = isAdmin ? adminMenus : memberMenus;
 
   const handleLogout = () => {
     localStorage.clear();

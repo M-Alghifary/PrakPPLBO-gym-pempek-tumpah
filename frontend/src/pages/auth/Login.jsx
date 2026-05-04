@@ -21,7 +21,7 @@ export default function Login() {
       localStorage.setItem('token', token);
       localStorage.setItem('name', name);
       localStorage.setItem('email', email);
-      localStorage.setItem('role', role);
+      localStorage.setItem('userRole', role);
 
       // Redirect berdasarkan role
       if (role === 'ADMIN' || role === 'OWNER') {

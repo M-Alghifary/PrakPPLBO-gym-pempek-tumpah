@@ -17,13 +17,19 @@ export default function Register() {
     localStorage.clear();
     try {
       const res = await api.post('/auth/register', form);
-      const { token, name, role } = res.data.data;
+      const { token, name, role, email } = res.data.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('name', name);
-      localStorage.setItem('role', role);
+      localStorage.setItem('email', email);
+      localStorage.setItem('userRole', role);
 
-      navigate('/dashboard');
+      // Redirect sesuai role
+      if (role === 'ADMIN' || role === 'OWNER') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Registrasi gagal');
     } finally {

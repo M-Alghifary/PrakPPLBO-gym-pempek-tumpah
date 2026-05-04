@@ -2,6 +2,8 @@ package com.gym.backend.admin.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,140 +31,201 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final UserRepository userRepository;
-    private final MemberMembershipRepository memberMembershipRepository;
-    private final MembershipPackageRepository packageRepository;
-    private final GymClassRepository gymClassRepository;
-    private final ClassBookingRepository bookingRepository;
+        private final UserRepository userRepository;
+        private final MemberMembershipRepository memberMembershipRepository;
+        private final MembershipPackageRepository packageRepository;
+        private final GymClassRepository gymClassRepository;
+        private final ClassBookingRepository bookingRepository;
 
-    // ── Member management ─────────────────────────────────────────────────
+        // ── Member management ─────────────────────────────────────────────────
 
-    @Transactional(readOnly = true)
-    public List<AdminMemberResponse> getAllMembers() {
-        return userRepository.findAll()
-                .stream()
-                .map(user -> {
-                    boolean hasActiveMembership = memberMembershipRepository
-                            .existsByUserIdAndStatusAndEndDateAfter(
-                                    user.getId(),
-                                    MemberMembership.Status.ACTIVE,
-                                    LocalDate.now()
-                            );
+        @Transactional(readOnly = true)
+        public List<AdminMemberResponse> getAllMembers() {
+                return userRepository.findAll()
+                                .stream()
+                                .map(user -> {
+                                        boolean hasActiveMembership = memberMembershipRepository
+                                                        .existsByUserIdAndStatusAndEndDateAfter(
+                                                                        user.getId(),
+                                                                        MemberMembership.Status.ACTIVE,
+                                                                        LocalDate.now());
 
-                    String membershipStatus = hasActiveMembership ? "ACTIVE" : "INACTIVE";
+                                        String membershipStatus = hasActiveMembership ? "ACTIVE" : "INACTIVE";
 
-                    return AdminMemberResponse.builder()
-                            .id(user.getId())
-                            .name(user.getName())
-                            .email(user.getEmail())
-                            .role(user.getRole().name())
-                            .hasMembership(hasActiveMembership)
-                            .membershipStatus(membershipStatus)
-                            .joinedAt(user.getCreatedAt())
-                            .build();
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void updateUserRole(Long userId, String role) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
-
-        try {
-            User.Role newRole = User.Role.valueOf(role.toUpperCase());
-            user.setRole(newRole);
-            userRepository.save(user);
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Role tidak valid. Pilihan: MEMBER, ADMIN, TRAINER, OWNER");
-        }
-    }
-
-    // ── Class management ──────────────────────────────────────────────────
-
-    @Transactional(readOnly = true)
-    public List<GymClassResponse> getAllClasses() {
-        return gymClassRepository.findAll()
-                .stream()
-                .map(this::toClassResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void cancelClass(Long classId) {
-        GymClass gymClass = gymClassRepository.findById(classId)
-                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
-
-        if (gymClass.getStatus() == GymClass.Status.CANCELLED) {
-            throw new BadRequestException("Kelas sudah dibatalkan sebelumnya");
+                                        return AdminMemberResponse.builder()
+                                                        .id(user.getId())
+                                                        .name(user.getName())
+                                                        .email(user.getEmail())
+                                                        .role(user.getRole().name())
+                                                        .hasMembership(hasActiveMembership)
+                                                        .membershipStatus(membershipStatus)
+                                                        .joinedAt(user.getCreatedAt())
+                                                        .build();
+                                })
+                                .collect(Collectors.toList());
         }
 
-        gymClass.setStatus(GymClass.Status.CANCELLED);
-        gymClassRepository.save(gymClass);
-    }
+        @Transactional
+        public void updateUserRole(Long userId, String role) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
 
-    // ── Reports ───────────────────────────────────────────────────────────
+                try {
+                        User.Role newRole = User.Role.valueOf(role.toUpperCase());
+                        user.setRole(newRole);
+                        userRepository.save(user);
+                } catch (IllegalArgumentException e) {
+                        throw new BadRequestException("Role tidak valid. Pilihan: MEMBER, ADMIN, TRAINER, OWNER");
+                }
+        }
 
-    @Transactional(readOnly = true)
-    public ReportResponse getReport() {
-        long totalMembers = userRepository.count();
+        // ── Class management ──────────────────────────────────────────────────
 
-        long activeMembers = userRepository.findAll()
-                .stream()
-                .filter(user -> memberMembershipRepository
-                        .existsByUserIdAndStatusAndEndDateAfter(
-                                user.getId(),
-                                MemberMembership.Status.ACTIVE,
-                                LocalDate.now()
-                        ))
-                .count();
+        @Transactional(readOnly = true)
+        public List<GymClassResponse> getAllClasses() {
+                return gymClassRepository.findAll()
+                                .stream()
+                                .map(this::toClassResponse)
+                                .collect(Collectors.toList());
+        }
 
-        long totalClasses = gymClassRepository.count();
-        long totalBookings = bookingRepository.count();
+        @Transactional
+        public void cancelClass(Long classId) {
+                GymClass gymClass = gymClassRepository.findById(classId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
 
-        // Total revenue dari semua membership yang pernah aktif
-        BigDecimal totalRevenue = memberMembershipRepository.findAll()
-                .stream()
-                .map(m -> m.getMembershipPackage().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                if (gymClass.getStatus() == GymClass.Status.CANCELLED) {
+                        throw new BadRequestException("Kelas sudah dibatalkan sebelumnya");
+                }
 
-        // Kelas yang paling banyak di-booking
-        String mostPopularClass = bookingRepository.findAll()
-                .stream()
-                .collect(Collectors.groupingBy(
-                        b -> b.getGymClass().getName(),
-                        Collectors.counting()
-                ))
-                .entrySet()
-                .stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse("Belum ada data");
+                gymClass.setStatus(GymClass.Status.CANCELLED);
+                gymClassRepository.save(gymClass);
+        }
 
-        return ReportResponse.builder()
-                .totalMembers(totalMembers)
-                .activeMembers(activeMembers)
-                .totalClasses(totalClasses)
-                .totalBookings(totalBookings)
-                .totalRevenue(totalRevenue)
-                .mostPopularClass(mostPopularClass)
-                .build();
-    }
+        // ── Reports ───────────────────────────────────────────────────────────
 
-    // ── Mapper ────────────────────────────────────────────────────────────
+        @Transactional(readOnly = true)
+        public ReportResponse getReport() {
+                long totalMembers = userRepository.count();
 
-    private GymClassResponse toClassResponse(GymClass c) {
-        return GymClassResponse.builder()
-                .id(c.getId())
-                .name(c.getName())
-                .description(c.getDescription())
-                .trainerName(c.getTrainer() != null ? c.getTrainer().getName() : "TBA")
-                .startTime(c.getStartTime())
-                .endTime(c.getEndTime())
-                .maxCapacity(c.getMaxCapacity())
-                .currentCapacity(c.getCurrentCapacity())
-                .remainingSlots(c.getRemainingSlots())
-                .status(c.getStatus().name())
-                .build();
-    }
+                long activeMembers = userRepository.findAll()
+                                .stream()
+                                .filter(user -> memberMembershipRepository
+                                                .existsByUserIdAndStatusAndEndDateAfter(
+                                                                user.getId(),
+                                                                MemberMembership.Status.ACTIVE,
+                                                                LocalDate.now()))
+                                .count();
+
+                long totalClasses = gymClassRepository.count();
+                long totalBookings = bookingRepository.count();
+
+                // Total revenue dari semua membership yang pernah aktif
+                BigDecimal totalRevenue = memberMembershipRepository.findAll()
+                                .stream()
+                                .map(m -> m.getMembershipPackage().getPrice())
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                // Kelas yang paling banyak di-booking
+                String mostPopularClass = bookingRepository.findAll()
+                                .stream()
+                                .collect(Collectors.groupingBy(
+                                                b -> b.getGymClass().getName(),
+                                                Collectors.counting()))
+                                .entrySet()
+                                .stream()
+                                .max(Map.Entry.comparingByValue())
+                                .map(Map.Entry::getKey)
+                                .orElse("Belum ada data");
+
+                return ReportResponse.builder()
+                                .totalMembers(totalMembers)
+                                .activeMembers(activeMembers)
+                                .totalClasses(totalClasses)
+                                .totalBookings(totalBookings)
+                                .totalRevenue(totalRevenue)
+                                .mostPopularClass(mostPopularClass)
+                                .build();
+        }
+
+        // ── Admin Dashboard Stats ─────────────────────────────────────────────
+
+        @Transactional(readOnly = true)
+        public Map<String, Object> getDashboardStats() {
+                long totalMembers = userRepository.count();
+                long todayCheckins = bookingRepository.findAll()
+                                .stream()
+                                .filter(b -> {
+                                        LocalDateTime bookedAt = b.getBookedAt();
+                                        return bookedAt != null &&
+                                                        bookedAt.toLocalDate().equals(LocalDate.now());
+                                })
+                                .count();
+                long totalClasses = gymClassRepository.count();
+
+                return Map.of(
+                                "totalMembers", totalMembers,
+                                "checkinToday", todayCheckins,
+                                "classes", totalClasses);
+        }
+
+        @Transactional(readOnly = true)
+        public List<AdminMemberResponse> getTodayCheckins() {
+                LocalDate today = LocalDate.now();
+                LocalDateTime startOfDay = today.atStartOfDay();
+                LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+                return bookingRepository.findAll()
+                                .stream()
+                                .filter(b -> {
+                                        LocalDateTime bookedAt = b.getBookedAt();
+                                        return bookedAt != null &&
+                                                        bookedAt.isAfter(startOfDay) &&
+                                                        bookedAt.isBefore(endOfDay);
+                                })
+                                .map(b -> AdminMemberResponse.builder()
+                                                .id(b.getUser().getId())
+                                                .name(b.getUser().getName())
+                                                .email(b.getUser().getEmail())
+                                                .role(b.getUser().getRole().name())
+                                                .hasMembership(memberMembershipRepository
+                                                                .existsByUserIdAndStatusAndEndDateAfter(
+                                                                                b.getUser().getId(),
+                                                                                MemberMembership.Status.ACTIVE,
+                                                                                LocalDate.now()))
+                                                .membershipStatus("ACTIVE")
+                                                .joinedAt(b.getBookedAt())
+                                                .build())
+                                .distinct()
+                                .collect(Collectors.toList());
+        }
+
+        @Transactional
+        public void deleteMember(Long userId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+
+                if (user.getRole() == User.Role.ADMIN || user.getRole() == User.Role.OWNER) {
+                        throw new BadRequestException("Tidak dapat menghapus admin atau owner");
+                }
+
+                userRepository.delete(user);
+        }
+
+        // ── Mapper ────────────────────────────────────────────────────────────
+
+        private GymClassResponse toClassResponse(GymClass c) {
+                return GymClassResponse.builder()
+                                .id(c.getId())
+                                .name(c.getName())
+                                .description(c.getDescription())
+                                .trainerName(c.getTrainer() != null ? c.getTrainer().getName() : "TBA")
+                                .startTime(c.getStartTime())
+                                .endTime(c.getEndTime())
+                                .maxCapacity(c.getMaxCapacity())
+                                .currentCapacity(c.getCurrentCapacity())
+                                .remainingSlots(c.getRemainingSlots())
+                                .status(c.getStatus().name())
+                                .build();
+        }
 }
