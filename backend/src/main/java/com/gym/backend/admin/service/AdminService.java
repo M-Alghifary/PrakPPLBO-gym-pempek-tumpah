@@ -20,6 +20,7 @@ import com.gym.backend.common.exception.ResourceNotFoundException;
 import com.gym.backend.membership.model.MemberMembership;
 import com.gym.backend.membership.repository.MemberMembershipRepository;
 import com.gym.backend.membership.repository.MembershipPackageRepository;
+import com.gym.backend.schedule.dto.GymClassRequest;
 import com.gym.backend.schedule.dto.GymClassResponse;
 import com.gym.backend.schedule.model.GymClass;
 import com.gym.backend.schedule.repository.ClassBookingRepository;
@@ -102,6 +103,28 @@ public class AdminService {
                                 .stream()
                                 .map(this::toClassResponse)
                                 .collect(Collectors.toList());
+        }
+
+        @Transactional
+        public GymClassResponse updateClass(Long classId, GymClassRequest request) {
+                GymClass gymClass = gymClassRepository.findById(classId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
+
+                User trainer = null;
+                if (request.getTrainerId() != null) {
+                        trainer = userRepository.findById(request.getTrainerId())
+                                        .orElseThrow(() -> new ResourceNotFoundException("Trainer tidak ditemukan"));
+                }
+
+                gymClass.setName(request.getName());
+                gymClass.setDescription(request.getDescription());
+                gymClass.setTrainer(trainer);
+                gymClass.setStartTime(request.getStartTime());
+                gymClass.setEndTime(request.getEndTime());
+                gymClass.setMaxCapacity(request.getMaxCapacity());
+                gymClassRepository.save(gymClass);
+
+                return toClassResponse(gymClass);
         }
 
         @Transactional
