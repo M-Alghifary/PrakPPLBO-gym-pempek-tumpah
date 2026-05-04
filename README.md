@@ -3,6 +3,12 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 ---
 
+# Teknologi yang Digunakan
+- Backend: Spring Boot 3.5.13 (Java 22) 
+- Frontend: JavaScript (Mobile/Web Development) 
+- Database: MySQL 
+- Tools: Laragon/XAMPP, Maven Wrapper
+
 ## Sprint 1: Requirement & Auth
 **Periode:** 2 Februari 2026 - 13 Februari 2026
 
