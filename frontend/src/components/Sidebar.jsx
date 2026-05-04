@@ -9,7 +9,10 @@ const memberMenus = [
 ];
 
 const adminMenus = [
-  { label: 'Dashboard Admin', path: '/admin/dashboard', icon: '📊' },
+  { label: 'Home', path: '/admin/dashboard', icon: '🏠' },
+  { label: 'Manajemen Member', path: '/admin/members', icon: '👥' },
+  { label: 'Manajemen Kelas', path: '/admin/classes', icon: '📅' },
+  { label: 'Laporan Keuangan', path: '/admin/finance', icon: '💰' },
 ];
 
 export default function Sidebar() {

@@ -3,6 +3,12 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import MemberDashboard from './pages/dashboard/MemberDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminMemberPage from './pages/admin/AdminMemberPage';
+import AdminClassPage from './pages/admin/AdminClassPage';
+import AdminFinancePage from './pages/admin/AdminFinancePage';
+        <Route path="/admin/finance" element={
+          <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminFinancePage /></PrivateRoute>
+        } />
 import Schedule from './pages/schedule/Schedule';
 import Booking from './pages/booking/Booking';
 import Report from './pages/report/Report';
@@ -58,6 +64,15 @@ function App() {
         {/* Admin Routes */}
         <Route path="/admin/dashboard" element={
           <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminDashboard /></PrivateRoute>
+        } />
+        <Route path="/admin/members" element={
+          <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminMemberPage /></PrivateRoute>
+        } />
+        <Route path="/admin/classes" element={
+          <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminClassPage /></PrivateRoute>
+        } />
+        <Route path="/admin/finance" element={
+          <PrivateRoute allowedRoles={['ADMIN', 'OWNER']}><AdminFinancePage /></PrivateRoute>
         } />
 
         {/* Default Routes */}
