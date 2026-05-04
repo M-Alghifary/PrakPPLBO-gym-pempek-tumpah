@@ -13,6 +13,7 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 - [x] **1.4 API Login & Auth System** (Backend)
 
 ### Technical Documentation
+Mockup design (Rafly & Yasa)
 https://www.figma.com/design/fTq8VfZoXyemRBN807QXQq/PT-PEMPEK-TUMPAH-MENCARI-CINTA?node-id=0-1&p=f&t=ds2idzijxrb77lIH-0
 #### Database Entity Relationship Diagram (ERD)
 
