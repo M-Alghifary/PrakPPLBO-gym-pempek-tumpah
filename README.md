@@ -3,6 +3,11 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 ---
 
+# Daftar isi
+## Teknologi yang Digunakan
+
+---
+
 # Teknologi yang Digunakan
 - Backend: Spring Boot 3.5.13 (Java 22) 
 - Frontend: JavaScript (Mobile/Web Development) 
