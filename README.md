@@ -79,16 +79,9 @@ Berdasarkan WBS, proyek ini dibagi menjadi 6 Sprint utama:
 https://www.figma.com/design/fTq8VfZoXyemRBN807QXQq/PT-PEMPEK-TUMPAH-MENCARI-CINTA?node-id=0-1&p=f&t=ds2idzijxrb77lIH-0
 #### Database Entity Relationship Diagram (ERD)
 
-## Stack
-- Backend: Spring Boot 3.5.13, Java 22, MySQL
-- Frontend: (coming soon)
+---
 
-## Cara Menjalankan Backend
-
-1. Pastikan MySQL aktif (Laragon / XAMPP)
-2. Buat database: `CREATE DATABASE gym_db;`
-3. Sesuaikan `application-dev.yml` 
-4. Jalankan: `cd backend && ./mvnw spring-boot:run`
+# Langkah-langkah run project
 
 ## Struktur Project
 Lihat `backend/src/main/java/com/gym/backend/`
