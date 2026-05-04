@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import com.gym.backend.common.response.ApiResponse;
 import com.gym.backend.schedule.dto.GymClassRequest;
 import com.gym.backend.schedule.dto.GymClassResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -86,7 +88,7 @@ public class AdminController {
     @PutMapping("/classes/{classId}")
     public ResponseEntity<ApiResponse<GymClassResponse>> updateClass(
             @PathVariable Long classId,
-            @RequestBody GymClassRequest request) {
+            @Valid @RequestBody GymClassRequest request) {
         GymClassResponse updated = adminService.updateClass(classId, request);
         return ResponseEntity.ok(ApiResponse.success("Kelas berhasil diperbarui", updated));
     }

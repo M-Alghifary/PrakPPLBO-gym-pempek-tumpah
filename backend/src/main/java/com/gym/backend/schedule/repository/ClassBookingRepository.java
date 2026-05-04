@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import com.gym.backend.schedule.model.ClassBooking;
@@ -23,6 +24,10 @@ public interface ClassBookingRepository extends JpaRepository<ClassBooking, Long
     // Semua peserta di satu kelas
     List<ClassBooking> findByGymClassIdAndStatus(
             Long gymClassId, ClassBooking.Status status);
+
+    // Hapus semua booking untuk kelas tertentu
+    @Modifying
+    void deleteByGymClassId(Long gymClassId);
     
     // Semua booking untuk trainer (kelas yang dia ajar)        
     List<ClassBooking> findByGymClassTrainerIdOrderByBookedAtAsc(Long trainerId);

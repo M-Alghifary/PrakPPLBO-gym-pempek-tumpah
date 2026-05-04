@@ -78,6 +78,9 @@ public class ScheduleService {
     public void deleteClass(Long classId) {
         GymClass gymClass = gymClassRepository.findById(classId)
                 .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
+
+        // Hapus booking yang terkait terlebih dahulu agar tidak terjadi constraint error
+        bookingRepository.deleteByGymClassId(classId);
         gymClassRepository.delete(gymClass);
     }
 

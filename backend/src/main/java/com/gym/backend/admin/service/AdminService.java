@@ -105,6 +105,15 @@ public class AdminService {
         }
 
         @Transactional
+        public void deleteClass(Long classId) {
+                GymClass gymClass = gymClassRepository.findById(classId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
+
+                bookingRepository.deleteByGymClassId(classId);
+                gymClassRepository.delete(gymClass);
+        }
+
+        @Transactional
         public void cancelClass(Long classId) {
                 GymClass gymClass = gymClassRepository.findById(classId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Kelas tidak ditemukan"));
