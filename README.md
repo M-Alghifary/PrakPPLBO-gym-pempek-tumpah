@@ -5,8 +5,8 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 
 # Daftar isi
 1. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
-2. [Progres Sprint](#progres-sprint)
-3. [Rencana Pengembangan (Roadmap)](#Rencana_Pengembangan_Roadmap)
+2. [Rencana Pengembangan (Roadmap)](#Rencana_Pengembangan_Roadmap)
+3. [Progres Sprint](#progres-sprint)
 4. [Technical Documentation](#technical-documentation)
 5. [Langkah-langkah run project](#langkah-langkah-run-project)
 
