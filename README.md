@@ -9,6 +9,20 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 - Database: MySQL 
 - Tools: Laragon/XAMPP, Maven Wrapper
 
+---
+
+# Rencana Pengembangan (Roadmap)
+Berdasarkan WBS, proyek ini dibagi menjadi 6 Sprint utama:
+1. Sprint 1: Requirement & Auth (Februari) 
+2. Sprint 2: Membership Phase (Februari)
+3. Sprint 3: Class & Scheduling (Maret)
+4. Sprint 4: Booking & QR Check-in (Maret)
+5. Sprint 5: Payment & Tracking (April)
+6. Sprint 6: Final QA & Deploy (April)
+
+---
+
+# Progres Sprint
 ## Sprint 1: Requirement & Auth
 **Periode:** 2 Februari 2026 - 13 Februari 2026
 
@@ -58,8 +72,7 @@ Sistem informasi manajemen gym berbasis mobile untuk memudahkan Member dalam boo
 - [x] **6.2 Penyusunan User Manual & Dokumen** 
 - [x] **6.3 Deployment & Final Presentation**
 
-
-
+---
 
 ### Technical Documentation
 #### Mockup UI/UX design (Rafly & Yasa)
