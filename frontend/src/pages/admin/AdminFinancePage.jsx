@@ -19,6 +19,77 @@ const transactions = [
   { date: '2 September', desc: 'Booking Kelas', category: 'Pemasukan', amount: 85000, status: 'Berhasil' },
 ];
 
+const pieData = [
+  { label: 'Membership Bulanan', amount: 16510000, color: '#27ae60' },
+  { label: 'Booking Kelas', amount: 9906000, color: '#f7a800' },
+  { label: 'Membership 3 Bulan', amount: 8604000, color: '#6c5ce7' },
+];
+
+const monthlyIncome = [
+  { month: 'Juni', amount: 10200000 },
+  { month: 'Juli', amount: 13500000 },
+  { month: 'Agustus', amount: 8800000 },
+  { month: 'September', amount: 1355000 },
+];
+
+const formatCurrency = (value) => value.toLocaleString('id-ID');
+
+function buildConicGradient(data) {
+  const total = data.reduce((sum, item) => sum + item.amount, 0);
+  let offset = 0;
+  return data
+    .map((item) => {
+      const start = offset;
+      const slice = (item.amount / total) * 100;
+      offset += slice;
+      return `${item.color} ${start}% ${offset}%`;
+    })
+    .join(', ');
+}
+
+function PieChart({ data }) {
+  const gradient = buildConicGradient(data);
+  const total = data.reduce((sum, item) => sum + item.amount, 0);
+
+  return (
+    <div className="pie-chart" style={{ background: `conic-gradient(${gradient})` }}>
+      <div className="pie-chart-inner">
+        <div className="pie-chart-value">Rp.</div>
+        <div className="pie-chart-percent">{formatCurrency(total)}</div>
+      </div>
+    </div>
+  );
+}
+
+function BarChart({ data }) {
+  const maxAmount = Math.max(...data.map((item) => item.amount));
+
+  return (
+    <div className="bar-chart">
+      <div className="bar-axis" />
+      <div className="bar-series">
+        {data.map((item) => {
+          const fillHeight = Math.max(25, Math.round((item.amount / maxAmount) * 100));
+
+          return (
+            <div className="bar-item" key={item.month}>
+              <span className="bar-value">Rp {formatCurrency(item.amount)}</span>
+              <div
+                className="bar-fill"
+                style={{
+                  height: `${fillHeight}%`,
+                }}
+                title={`Rp ${formatCurrency(item.amount)}`}
+              />
+              <span className="bar-label">{item.month}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function AdminFinancePage() {
   return (
     <Layout>
@@ -74,19 +145,19 @@ export default function AdminFinancePage() {
           <div className="finance-charts">
             <div className="chart-card">
               <div className="chart-title">Ringkasan Berdasarkan Diagram</div>
-              <img src="https://placehold.co/180x120/purple/white?text=Pie+Chart" alt="Pie Chart" className="chart-img" />
+              <PieChart data={pieData} />
               <ul className="chart-legend">
-                <li><span className="dot" style={{ background: '#27ae60' }} /> Membership Bulanan <span className="amount">Rp. 16.510.000</span></li>
-                <li><span className="dot" style={{ background: '#f7a800' }} /> Booking Kelas <span className="amount">Rp. 9.906.000</span></li>
-                <li><span className="dot" style={{ background: '#6c5ce7' }} /> Membership 3 Bulan <span className="amount">Rp. 8.604.000</span></li>
+                {pieData.map((item) => (
+                  <li key={item.label}>
+                    <span className="dot" style={{ background: item.color }} /> {item.label}
+                    <span className="amount">Rp. {formatCurrency(item.amount)}</span>
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="chart-card">
               <div className="chart-title">Grafik Pemasukan Bulanan</div>
-              <img src="https://placehold.co/180x120/blue/white?text=Bar+Chart" alt="Bar Chart" className="chart-img" />
-              <div className="chart-xaxis">
-                <span>Juni</span><span>Juli</span><span>Agustus</span><span>September</span>
-              </div>
+              <BarChart data={monthlyIncome} />
             </div>
           </div>
         </div>
